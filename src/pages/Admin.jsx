@@ -447,6 +447,33 @@ export default function Admin() {
                     background: rgba(0,0,0,0.2);
                     border-radius: 4px;
                 }
+
+                /* Responsive Styles */
+                @media (max-width: 768px) {
+                    .kanban-container {
+                        flex-direction: column;
+                        overflow-x: hidden;
+                        scroll-snap-type: none;
+                        gap: 16px;
+                    }
+                    .kanban-column {
+                        flex: 1 1 auto;
+                        width: 100%;
+                        scroll-snap-align: none;
+                        padding: 16px;
+                    }
+                    .kanban-card {
+                        padding: 16px;
+                    }
+                    /* Action buttons bigger on mobile for touch */
+                    .kanban-card svg {
+                        width: 20px;
+                        height: 20px;
+                    }
+                    .kanban-card .action-btn {
+                        padding: 12px !important;
+                    }
+                }
             `}</style>
 
             <div style={{
@@ -668,6 +695,7 @@ export default function Admin() {
                                                                     href={cleanPhone ? waLink : "#"}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
+                                                                    className="action-btn"
                                                                     style={{
                                                                         background: cleanPhone ? "#e8f5e9" : "#f9f9f9",
                                                                         color: cleanPhone ? "#25D366" : "#ccc",
@@ -686,6 +714,7 @@ export default function Admin() {
 
                                                                 <button
                                                                     onClick={() => handleDelete(appointment.id)}
+                                                                    className="action-btn"
                                                                     style={{
                                                                         background: "#fef2f2",
                                                                         border: "none",
@@ -814,42 +843,45 @@ export default function Admin() {
                                 {filteredPastAppointments.length === 0 ? (
                                     <p style={{ textAlign: "center", color: "#666", padding: 20 }}>No se encontraron turnos en el historial.</p>
                                 ) : (
-                                    <table style={{
-                                        width: "100%",
-                                        borderCollapse: "collapse",
-                                        backgroundColor: "rgba(255, 255, 255, 0.3)",
-                                        borderRadius: 12,
-                                        overflow: "hidden"
-                                    }}>
-                                        <thead>
-                                            <tr style={{ textAlign: "left", borderBottom: "1px solid rgba(0,0,0,0.08)", backgroundColor: "rgba(0,0,0,0.02)" }}>
-                                                <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Fecha</th>
-                                                <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Hora</th>
-                                                <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Cliente</th>
-                                                <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Teléfono</th>
-                                                <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Servicio</th>
-                                                <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Profesional</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {filteredPastAppointments.map((a) => {
-                                                const date = new Date(a.appointment_time)
-                                                const dateText = date.toLocaleDateString()
-                                                const timeText = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                                    <div style={{ overflowX: "auto" }}>
+                                        <table style={{
+                                            width: "100%",
+                                            minWidth: "600px",
+                                            borderCollapse: "collapse",
+                                            backgroundColor: "rgba(255, 255, 255, 0.3)",
+                                            borderRadius: 12,
+                                            overflow: "hidden"
+                                        }}>
+                                            <thead>
+                                                <tr style={{ textAlign: "left", borderBottom: "1px solid rgba(0,0,0,0.08)", backgroundColor: "rgba(0,0,0,0.02)" }}>
+                                                    <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Fecha</th>
+                                                    <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Hora</th>
+                                                    <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Cliente</th>
+                                                    <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Teléfono</th>
+                                                    <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Servicio</th>
+                                                    <th style={{ padding: "12px 16px", color: "#555", fontWeight: 600, fontSize: 13 }}>Profesional</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {filteredPastAppointments.map((a) => {
+                                                    const date = new Date(a.appointment_time)
+                                                    const dateText = date.toLocaleDateString()
+                                                    const timeText = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 
-                                                return (
-                                                    <tr key={a.id} className="admin-table-row" style={{ borderBottom: "1px solid rgba(0,0,0,0.03)" }}>
-                                                        <td style={{ padding: "12px 16px", fontSize: 14 }}>{dateText}</td>
-                                                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#444", fontWeight: 500 }}>{timeText}</td>
-                                                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#222", fontWeight: 500 }}>{a.client_name}</td>
-                                                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#666" }}>{a.phone}</td>
-                                                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#666" }}>{a.service_name || "-"}</td>
-                                                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#555" }}>{a.professionals?.name}</td>
-                                                    </tr>
-                                                )
-                                            })}
-                                        </tbody>
-                                    </table>
+                                                    return (
+                                                        <tr key={a.id} className="admin-table-row" style={{ borderBottom: "1px solid rgba(0,0,0,0.03)" }}>
+                                                            <td style={{ padding: "12px 16px", fontSize: 14 }}>{dateText}</td>
+                                                            <td style={{ padding: "12px 16px", fontSize: 14, color: "#444", fontWeight: 500 }}>{timeText}</td>
+                                                            <td style={{ padding: "12px 16px", fontSize: 14, color: "#222", fontWeight: 500 }}>{a.client_name}</td>
+                                                            <td style={{ padding: "12px 16px", fontSize: 14, color: "#666" }}>{a.phone}</td>
+                                                            <td style={{ padding: "12px 16px", fontSize: 14, color: "#666" }}>{a.service_name || "-"}</td>
+                                                            <td style={{ padding: "12px 16px", fontSize: 14, color: "#555" }}>{a.professionals?.name}</td>
+                                                        </tr>
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 )}
                             </div>
                         </div>
